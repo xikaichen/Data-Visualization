@@ -1,0 +1,249 @@
+
+div#map {
+    width: 100%;
+    height: 750px !important;
+    animation:myfirst 2s ease-in-out 0s infinite alternate;
+    /*opacity: 0.15;*/
+    /*z-index: -1;*/
+    /*transition-timing-function: linear;*/
+    /*animation-timing-function: ease-in;*/
+}
+/*@keyframes myfirst
+{
+0%   {opacity: 0;}
+30%  {opacity: 0.5;}
+50%  {opacity: 1;}
+60%  {opacity: 1;}
+70%  {opacity: 0.3;}
+100% {opacity: 0;}
+}*/
+
+div#map1 {
+  width: 100%;
+  height: 750px !important;
+  /*transition: 5s;*/
+}
+   
+div.outer {
+  
+  top: 100px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.col-sm-6{
+left : 330px !important;
+}
+
+
+.play {
+  color:red;
+  font-weight:900;
+}
+.pause {
+  color:red;
+  font-weight:900;
+}
+.irs-grid-text {
+  color:black;
+  font-weight:900;
+}
+
+
+#hover_box {
+  /* Appearance */
+  background-color: white;
+  padding: 0px 20px 0px 20px;
+  cursor: move;
+  /* Fade out while not hovering */
+  opacity: 0.45;
+  zoom: 0.9;
+  /*transition: opacity 50ms 1s;*/
+  transition: background 0.5s;
+}
+#hover_box:hover {
+  /* Fade in while hovering */
+
+  opacity: 0.95;
+  transition-delay: 0;
+}
+
+#hover_box1:hover {
+  /* Fade in while hovering */
+  opacity: 0.95;
+  transition-delay: 0;
+}
+			  
+#plot3{
+  height:800px;
+}
+
+#plot2{
+  height:800px;
+}
+
+#plot1{
+  height:800px;
+}
+
+.field1 {
+   float:left;
+}
+
+.field2 {
+   float:grid-height;
+}
+
+
+
+
+
+.container{
+height : 550px !important ;
+width:100%
+}
+
+
+
+.navbar.navbar-default.navbar-static-top {
+  height:100px;
+}
+
+
+
+
+#ex1 {
+  overflow-x : auto !important;
+}
+#ex2 {
+  overflow-x : auto !important;
+}
+#ex3 {
+  overflow-x : auto !important;
+}
+#ex4 {
+  overflow-x : auto !important;
+}
+#ex5 {
+  overflow-x : auto !important;
+}
+
+.imageContainer { 
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  list-style: none;
+  /*margin: 0;*/
+  /*padding: 0;*/
+  /*margin-top: 400px;*/
+}
+
+.imageContainer li { 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  z-index: 0;
+  animation: imageAnimation 40s linear infinite; 
+}
+
+.imageContainer li:nth-child(1) { 
+  background-image: url(http://i.imgur.com/VWzVNJs.png) 
+}
+.imageContainer li:nth-child(2) { 
+  background-image: url(http://i.imgur.com/mTu1yTc.png);
+  animation-delay: 8s; 
+}
+.imageContainer li:nth-child(3) { 
+  background-image: url(http://i.imgur.com/wopiPOA.png);
+  animation-delay: 16s; 
+}
+.imageContainer li:nth-child(4) { 
+  background-image: url(http://i.imgur.com/0SfXbbs.png);
+  animation-delay: 24s; 
+}
+.imageContainer li:nth-child(5) { 
+  background-image: url(http://i.imgur.com/0SfXbbs.png);
+  animation-delay: 32s; 
+}
+
+@keyframes imageAnimation { 
+  0% { 
+    opacity: 0; 
+    animation-timing-function: ease-in;
+  }
+  10% {
+    opacity: 0.4;
+    animation-timing-function: ease-out;
+  }
+  20% {
+    opacity: 0.4;
+  }
+  30% {
+    opacity: 0
+  }
+}
+
+#preImage img {
+  position:relative;
+  width:685px;
+  height:400px;
+}
+
+#intro .col-sm-12{
+  top:-30px;
+}
+
+#plothour1 {
+  float:center;
+  max-width: 800px;
+  max-height: 500px;
+}
+
+#plothour2 {
+  float:center;
+  max-width: 800px;
+  max-height: 500px;
+}
+#plothour3 {
+  float:center;
+  max-width: 800px;
+  max-height: 500px;
+}
+
+#ME_accuracy1 {
+  float:center;
+  max-width: 800px;
+  max-height: 500px;
+}
+
+#ME_accuracy2 {
+  float:center;
+  max-width: 800px;
+  max-height: 500px;
+}
+
+#ME_accuracy3 {
+  float:center;
+  max-width: 800px;
+  max-height: 500px;
+}
+
+#russia_records {
+  float:center;
+  max-width: 800px;
+  max-height: 500px;
+}
+
+
