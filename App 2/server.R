@@ -1,8 +1,17 @@
 shinyServer(function(input,output,session){
   
   output$map <- renderLeaflet({
-    palColor = colorFactor(c("blue", "red"),
-                           domain = c("Above Average", "Below Average"))
+    customIcon <- icons(
+      iconUrl = "https://camo.githubusercontent.com/afa9cd3e3fde5e3768f0061f4a1d330d0cb25383/68747470733a2f2f7261772e6769746875622e636f6d2f706f696e7468692f6c6561666c65742d636f6c6f722d6d61726b6572732f6d61737465722f696d672f6d61726b65722d69636f6e2d626c75652e706e673f7261773d74727565",
+      iconWidth = 20, iconHeight = 30,
+      iconAnchorX = 20, iconAnchorY = 20
+    )
+    landmarkIcons <- icons(
+      iconUrl = "https://camo.githubusercontent.com/70c53b19fb9ec32c09ff59b4aebe6bb8058dfb8b/68747470733a2f2f7261772e6769746875622e636f6d2f706f696e7468692f6c6561666c65742d636f6c6f722d6d61726b6572732f6d61737465722f696d672f6d61726b65722d69636f6e2d7265642e706e673f7261773d74727565",
+      iconWidth = 20, iconHeight = 30,
+      iconAnchorX = 20, iconAnchorY = 20
+    )
+    
     lands[[input$landmark]] %>%  
       filter(hour==input$bins) %>% 
       leaflet() %>% 
@@ -10,8 +19,24 @@ shinyServer(function(input,output,session){
       addTiles(urlTemplate = mapbox,
                attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>') %>%
       addMarkers(~Longitude, ~Lattitude,
-                 clusterOptions = markerClusterOptions(disableClusteringAtZoom = 15,animate = TRUE))
-    
+                 clusterOptions = markerClusterOptions(disableClusteringAtZoom = 15,animate = TRUE),
+                 icon = customIcon,
+                 popup = ~ paste( sep = "<br/>",
+                                  "<b>Description</b>",
+                                  paste('<b>User ID : </b>', `User ID`,sep = ' '  ),
+                                  paste('<b>Time Stamp :</b>', `Time Stamp`, sep = ' ')
+                 )) %>% 
+      addMarkers(~single[[input$landmark]][2],~single[[input$landmark]][1],
+                 icon = landmarkIcons,
+                 popup=~paste( sep = "<br/>",
+                               "<b>Description</b>",
+                               paste('<b>Landmark </b>', input$landmark ,sep = ' '  )))
+  })
+  
+  output$IDs <- renderText({
+    paste("The number of unique tourists is:",lands[[input$landmark]] %>%  
+      filter(hour==input$bins) %>%
+      .$`User ID` %>% as.vector %>% unique %>% length)
   })
   
   output$map1 <- renderLeaflet({ 
@@ -80,44 +105,10 @@ shinyServer(function(input,output,session){
       russia_12_11,  rownames=FALSE) %>%
       formatStyle(input$selected,
                   background="skyblue", fontWeight='bold')})
+  
 
-  #====================     Number of Records ===========================
-  output$plothour1 = renderPlotly({
-    (x_group_count %>% 
-       ggplot(aes(y=count,x=as_factor(COUNTRY)))+
-       geom_bar(stat="identity",fill='skyblue2')+
-       coord_flip()+
-       ylab('Number of Records')+
-       xlab('Country Name')+
-       ggtitle('Number of Records by Country')) %>% 
-      ggplotly
-  })
-  
-  output$plothour2 = renderPlotly({
-    (x_group_count %>% 
-       mutate(percentage=100*count/Population) %>% 
-       ggplot(aes(y=percentage,x=as_factor(COUNTRY)))+
-       geom_bar(stat="identity",fill='skyblue2')+
-       coord_flip()+
-       ylab('Number of Records/Population')+
-       xlab('Country Name')+
-       ggtitle('Proportion of Number of Records in Population by Country')) %>% 
-      ggplotly
-  })
-  
-  output$plothour3 = renderPlotly({
-    (x_group_count %>% 
-       mutate(percentage=count/gdp) %>% 
-       ggplot(aes(y=percentage,x=as_factor(COUNTRY)))+
-       geom_bar(stat="identity",fill='skyblue2')+
-       coord_flip()+
-       ylab('Number of Records/Total GDP')+
-       xlab('Country Name')+
-       ggtitle('Number of Records to Total GDP by Country')) %>% 
-      ggplotly
-  })
-  output$text = renderText({"aaaaaaaaaaaaaa"})
-  
+ 
+  #===========================================================
   output$distPlot <- renderPlotly({
     # generate bins based on input$bins from ui.R
     (x_group_count_hour %>% 
@@ -133,7 +124,6 @@ shinyServer(function(input,output,session){
   })
 
     output$russia_records <- renderPlotly({
-    # generate bins based on input$bins from ui.R
     (russia_count %>% 
        ggplot(aes(y=count,x=Hour %>% as.character))+
        geom_bar(stat="identity",fill='skyblue2')+
@@ -147,48 +137,13 @@ shinyServer(function(input,output,session){
   output$preImage <- renderImage({
     # When input$n is 3, filename is ./images/image3.jpeg
     filename <- normalizePath(file.path('./11',
-                                        paste(input$bins3, '.png', sep='')))
+                                        paste(input$bins3, '.jpg', sep='')))
     
     # Return a list containing the filename and alt text
     list(src = filename,
          alt = paste("Image number", input$bins3))
   }, deleteFile = FALSE)
   
-  #=======================Accuracy plot in ME==========================
-  output$ME_accuracy1 <- renderPlotly({
-    (x_group_accuracy %>% 
-       arrange(mean_Accuracy) %>% 
-       ggplot(aes(y=mean_Accuracy,x=as_factor(COUNTRY)))+
-       geom_bar(stat="identity",fill='skyblue2')+
-       coord_flip()+
-       ylab('Mean Accuracy')+
-       xlab('Country Name')+
-       ggtitle('Mean Accuracy by Country')) %>% 
-      ggplotly
-  })
-  
-  output$ME_accuracy2 <- renderPlotly({
-    (x_group_accuracy %>% 
-       arrange(st_accuracy) %>% 
-       ggplot(aes(y=st_accuracy,x=as_factor(COUNTRY)))+
-       geom_bar(stat="identity",fill='skyblue2')+
-       coord_flip()+
-       ylab('Standard Deviation of Accuracy')+
-       xlab('Country Name')+
-       ggtitle('Standard Deviation of Accuracy by Country')) %>% 
-      ggplotly
-  })
-  
-  output$ME_accuracy3 <- renderPlotly({
-    (x_group_accuracy_sd %>% 
-       ggplot(aes(y=st_accuracy,x=hour %>% as_factor))+
-       geom_bar(stat="identity",fill='skyblue2')+
-       coord_flip()+
-       ylab('Standard Deviation of Accuracy')+
-       xlab('Hour')+
-       ggtitle('Standard Deviation of Accuracy across Time')) %>% 
-      ggplotly
-  })
   
 #========================x_grounp_accuray with time====================================
 
@@ -204,9 +159,5 @@ shinyServer(function(input,output,session){
        ggtitle(paste('Mean Accuracy by Country at Hour',input$bins4))) %>% 
       ggplotly
   })
-#=========================Table=====================================
-  output$table <- renderTable({
-    reg %>% coeftest %>% as.table %>% as.data.frame %>% 
-      spread(Var2,Freq)
-    })
+
 })
